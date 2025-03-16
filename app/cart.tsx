@@ -4,6 +4,9 @@ import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CartItem } from '../models/product';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Ionicons } from '@expo/vector-icons';
+import * as Animatable from 'react-native-animatable';
 
 const CartScreen = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
@@ -45,22 +48,31 @@ const CartScreen = () => {
   };
 
   const renderCartItem = ({ item }: { item: CartItem }) => (
-    <View style={styles.cartItem}>
-      <Text style={styles.cartItemName}>{item.title}</Text>
-      <Text style={styles.cartItemPrice}>${item.price} x {item.quantity} = ${(item.price * item.quantity).toFixed(2)}</Text>
-      <View style={styles.quantityContainer}>
-        <TouchableOpacity onPress={() => updateQuantity(item, -1)}>
-          <Text style={styles.quantityButton}>-</Text>
-        </TouchableOpacity>
-        <Text style={styles.quantityText}>{item.quantity}</Text>
-        <TouchableOpacity onPress={() => updateQuantity(item, 1)}>
-          <Text style={styles.quantityButton}>+</Text>
+    <Animatable.View animation="fadeInUp" duration={800}>
+      <View style={styles.cartItem}>
+        <Text style={styles.cartItemName}>{item.title}</Text>
+        <Text style={styles.cartItemPrice}>${item.price} x {item.quantity} = ${(item.price * item.quantity).toFixed(2)}</Text>
+        <View style={styles.quantityContainer}>
+          <TouchableOpacity onPress={() => updateQuantity(item, -1)}>
+            <LinearGradient colors={['#ff6b6b', '#ee5253']} style={styles.quantityButton}>
+              <Text style={styles.quantityButtonText}>-</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+          <Text style={styles.quantityText}>{item.quantity}</Text>
+          <TouchableOpacity onPress={() => updateQuantity(item, 1)}>
+            <LinearGradient colors={['#28a745', '#218838']} style={styles.quantityButton}>
+              <Text style={styles.quantityButtonText}>+</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity style={styles.removeButton} onPress={() => removeItem(item)}>
+          <LinearGradient colors={['#dc3545', '#bd2130']} style={styles.removeButtonGradient}>
+            <Ionicons name="trash-outline" size={16} color="#fff" style={styles.buttonIcon} />
+            <Text style={styles.removeButtonText}>Remove</Text>
+          </LinearGradient>
         </TouchableOpacity>
       </View>
-      <TouchableOpacity style={styles.removeButton} onPress={() => removeItem(item)}>
-        <Text style={styles.removeButtonText}>Remove</Text>
-      </TouchableOpacity>
-    </View>
+    </Animatable.View>
   );
 
   return (
@@ -70,33 +82,54 @@ const CartScreen = () => {
         renderItem={renderCartItem}
         keyExtractor={(item) => item.id.toString()}
         ListEmptyComponent={<Text style={styles.emptyText}>Your cart is empty.</Text>}
+        contentContainerStyle={styles.list}
       />
-      <Text style={styles.totalText}>Total: ${getTotalPrice()}</Text>
-      <TouchableOpacity
-        style={styles.checkoutButton}
-        onPress={() => router.push({ pathname: '/checkout', params: { cartItems: JSON.stringify(cartItems) } })}
-        disabled={cartItems.length === 0}
-      >
-        <Text style={styles.checkoutButtonText}>Proceed to Checkout</Text>
-      </TouchableOpacity>
+      <Animatable.View animation="fadeInUp" duration={1000}>
+        <Text style={styles.totalText}>Total: ${getTotalPrice()}</Text>
+        <TouchableOpacity
+          style={styles.checkoutButton}
+          onPress={() => router.push({ pathname: '/checkout', params: { cartItems: JSON.stringify(cartItems) } })}
+          disabled={cartItems.length === 0}
+        >
+          <LinearGradient colors={['#28a745', '#218838']} style={styles.checkoutButtonGradient}>
+            <Ionicons name="checkmark-circle-outline" size={20} color="#fff" style={styles.buttonIcon} />
+            <Text style={styles.checkoutButtonText}>Proceed to Checkout</Text>
+          </LinearGradient>
+        </TouchableOpacity>
+      </Animatable.View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: '#f5f5f5' },
-  cartItem: { backgroundColor: '#fff', padding: 15, borderRadius: 10, marginBottom: 10 },
-  cartItemName: { fontSize: 16, fontWeight: 'bold' },
+  container: { flex: 1, backgroundColor: '#f5f5f5', paddingTop: 20 },
+  list: { paddingHorizontal: 20, paddingBottom: 20 },
+  cartItem: {
+    backgroundColor: '#fff',
+    borderRadius: 15,
+    padding: 15,
+    marginBottom: 15,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,
+  },
+  cartItemName: { fontSize: 16, fontWeight: 'bold', color: '#333' },
   cartItemPrice: { fontSize: 14, color: '#888', marginVertical: 5 },
   quantityContainer: { flexDirection: 'row', alignItems: 'center', marginVertical: 10 },
-  quantityButton: { fontSize: 20, paddingHorizontal: 10 },
-  quantityText: { fontSize: 16, marginHorizontal: 10 },
-  removeButton: { backgroundColor: '#dc3545', padding: 10, borderRadius: 5 },
-  removeButtonText: { color: '#fff', textAlign: 'center' },
-  totalText: { fontSize: 18, fontWeight: 'bold', textAlign: 'right', marginVertical: 10 },
-  checkoutButton: { backgroundColor: '#28a745', padding: 15, borderRadius: 5 },
-  checkoutButtonText: { color: '#fff', textAlign: 'center', fontSize: 16 },
-  emptyText: { textAlign: 'center', marginTop: 20, fontSize: 16 },
+  quantityButton: { borderRadius: 20, padding: 10, width: 40, alignItems: 'center' },
+  quantityButtonText: { color: '#fff', fontSize: 16, fontWeight: 'bold' },
+  quantityText: { fontSize: 16, color: '#333', marginHorizontal: 15 },
+  removeButton: { borderRadius: 10, overflow: 'hidden' },
+  removeButtonGradient: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: 10 },
+  buttonIcon: { marginRight: 8 },
+  removeButtonText: { color: '#fff', fontSize: 14, fontWeight: '600' },
+  totalText: { fontSize: 18, fontWeight: 'bold', color: '#333', textAlign: 'right', marginHorizontal: 20, marginBottom: 10 },
+  checkoutButton: { marginHorizontal: 20, marginBottom: 20, borderRadius: 15, overflow: 'hidden' },
+  checkoutButtonGradient: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: 15 },
+  checkoutButtonText: { color: '#fff', fontSize: 16, fontWeight: 'bold' },
+  emptyText: { textAlign: 'center', marginTop: 20, fontSize: 16, color: '#666' },
 });
 
 export default CartScreen;

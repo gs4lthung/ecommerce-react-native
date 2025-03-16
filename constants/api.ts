@@ -1,4 +1,5 @@
 // constants/api.tsx
+import { Product } from '@/models/product';
 import axios from 'axios';
 
 const API_URL = 'https://fakestoreapi.com';
