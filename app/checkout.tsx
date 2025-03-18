@@ -53,7 +53,12 @@ const CheckoutScreen = () => {
     Alert.alert(
       "Order Placed Successfully!",
       `Order Details:\n\nName: ${name}\nEmail: ${email}\nAddress: ${address}\n\nProducts:\n${orderDetails.cartItems
-        .map((item) => `• ${item.title} (x${item.quantity}) - $${item.price * item.quantity}`)
+        .map(
+          (item) =>
+            `• ${item.title} (x${item.quantity}) - $${
+              item.price * item.quantity
+            }`
+        )
         .join("\n")}\n\nTotal: $${orderDetails.total}`
     );
 
@@ -136,7 +141,12 @@ const CheckoutScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#f5f5f5", padding: 20 },
+  container: {
+    flex: 1,
+    backgroundColor: "#f5f5f5",
+    padding: 20,
+    marginTop: 30,
+  },
   formContainer: {
     backgroundColor: "#fff",
     borderRadius: 20,
