@@ -12,7 +12,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Animatable from "react-native-animatable";
 import { useRouter } from "expo-router";
-import { CartItem } from "../models/product";
+import { CartItem } from "../../models/product";
 
 const FavoriteScreen = () => {
   const [favoriteItems, setFavoriteItems] = useState<CartItem[]>([]);

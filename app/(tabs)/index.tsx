@@ -198,11 +198,11 @@ const ProductListScreen = () => {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Ecommerce App</Text>
-        <TouchableOpacity onPress={handleLogout}>
-          <Ionicons name="log-out-outline" size={24} color="#333" />
-        </TouchableOpacity>
         <TouchableOpacity onPress={handleFavorite}>
           <Ionicons name="heart" size={24} color="#333" />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleLogout}>
+          <Ionicons name="log-out-outline" size={24} color="#333" />
         </TouchableOpacity>
       </View>
       <View style={styles.searchContainer}>

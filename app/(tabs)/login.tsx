@@ -27,7 +27,7 @@ const LoginScreen = () => {
       });
       if (response.data.token) {
         Alert.alert("Success", "Login successful!");
-        router.push("/(drawer)/(tabs)");
+        router.push("/(tabs)");
       }
     } catch (err) {
       Alert.alert("Error", "Invalid credentials.");

@@ -1,14 +1,12 @@
-// app/_layout.tsx
-import { Stack } from "expo-router";
-import { StatusBar } from "expo-status-bar";
+import { Stack, Tabs } from "expo-router";
 
-export default function RootLayout() {
+export default function TabsLayout() {
   return (
-    <>
-      <StatusBar style="auto" />
-      <Stack>
-          <Stack.Screen name="(tabs)" />
-      </Stack>
-    </>
+    <Stack screenOptions={{ headerShown: false }}>
+      <Tabs.Screen name="(tabs)" options={{ title: "Home" }} />
+      <Tabs.Screen name="cart" options={{ title: "Cart" }} />
+      <Tabs.Screen name="checkout" options={{ title: "Checkout" }} />
+      <Tabs.Screen name="favorite" options={{ title: "Favorite" }} />
+    </Stack>
   );
 }
